@@ -31,3 +31,4 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
          anthropic_api_key: ${{ secrets.CLAUDE }}
+         claude_args: "--model claude-sonnet-5"
