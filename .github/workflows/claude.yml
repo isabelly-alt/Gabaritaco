@@ -32,3 +32,4 @@ jobs:
         with:
          anthropic_api_key: ${{ secrets.CLAUDE }}
          claude_args: "--model claude-sonnet-5"
+         show_full_output: true
