@@ -1,0 +1,20 @@
+{
+  "name": "gabaritaco-formatter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Converte arquivos .docx brutos em PDFs formatados no padrao Gabaritaco - VDE Concursos, agrupados por materia.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "setup-browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.9.6",
+    "docx": "^9.7.1",
+    "express": "^4.19.2",
+    "jszip": "^3.10.1",
+    "multer": "^1.4.5-lts.1",
+    "pdf-lib": "^1.17.1",
+    "playwright": "^1.56.1"
+  }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gabaritaço – Formatador de Provas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-badge">✓</span>
+    <span class="brand-text">GABARITAÇO <span class="dash">–</span> <span class="sub">VDE CONCURSOS</span></span>
+  </div>
+  <h1>Formatador de Provas</h1>
+</header>
+
+<main>
+  <section class="uploader" id="global-drop">
+    <input type="file" id="global-file-input" accept=".docx" hidden>
+    <div class="uploader-inner">
+      <div class="uploader-icon">📄</div>
+      <p><strong>Arraste um arquivo .docx aqui</strong> ou clique para escolher</p>
+      <p class="hint">O arquivo precisa começar com <code>DISCIPLINA: Nome da Matéria</code> — a matéria é criada ou atualizada automaticamente.</p>
+    </div>
+  </section>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <section id="materias-list" class="materias-list">
+    <p class="empty-state" id="empty-state">Nenhuma matéria ainda. Envie o primeiro arquivo .docx acima.</p>
+  </section>
+</main>
+
+<template id="materia-card-template">
+  <article class="materia-card">
+    <div class="materia-header">
+      <h2 class="materia-name"></h2>
+      <div class="materia-actions">
+        <a class="btn btn-primary btn-download" href="#" download>Baixar PDF</a>
+        <a class="btn btn-primary btn-download-docx" href="#" download>Baixar DOCX</a>
+        <button class="btn btn-danger btn-remove-materia" type="button">Excluir matéria</button>
+      </div>
+    </div>
+    <p class="materia-status"></p>
+
+    <div class="materia-body">
+      <div class="materia-col">
+        <h3>Arquivos brutos (.docx)</h3>
+        <ul class="section-list"></ul>
+        <label class="btn btn-secondary add-file-label">
+          + Adicionar arquivo .docx
+          <input type="file" class="add-file-input" accept=".docx" hidden>
+        </label>
+      </div>
+
+      <div class="materia-col">
+        <h3>Capa da matéria</h3>
+        <div class="cover-area">
+          <p class="cover-empty">Nenhuma capa enviada.</p>
+          <div class="cover-present" hidden>
+            <span class="cover-filename"></span>
+            <button class="btn btn-danger btn-small btn-remove-cover" type="button">Remover</button>
+          </div>
+          <label class="btn btn-secondary cover-upload-label">
+            Enviar capa (PDF/PNG/JPG)
+            <input type="file" class="cover-file-input" accept=".pdf,.png,.jpg,.jpeg" hidden>
+          </label>
+        </div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>
