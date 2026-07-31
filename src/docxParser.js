@@ -24,7 +24,11 @@ const MARKER_ACCENT_ALTS = {
   TITULO_SECAO: 'T[IÍ]TULO[_ ]SE[CÇ][AÃ]O',
   JURISPRUDENCIA: 'JURISPRUD[EÊ]NCIA',
   SUMULAS: 'S[UÚ]MULAS',
-  COMENTARIO_ARTIGO: 'COMENT[AÁ]RIO\\s+AO\\s+ARTIGO',
+  // Accepts any "Comentário(s) <preposição(ões)> <assunto>:" phrasing - not
+  // just "ao Artigo" - so "Comentários à Jurisprudência:"/"Comentários à
+  // Súmula:" open the same box (see comentarioLabelFor below for how the
+  // matched assunto maps back to a display label).
+  COMENTARIO_ARTIGO: 'COMENT[AÁ]RIOS?\\s+(?:\\S+\\s+){1,2}(?:ARTIGOS?|JURISPRUD[EÊ]NCIAS?|S[UÚ]MULAS?)',
   QUESTAO: 'QUEST[AÃ]O',
   COMENTARIOS: 'COMENT[AÁ]RIOS',
   MAPA_MENTAL: 'MAPA[_ ]MENTAL',
@@ -58,6 +62,19 @@ const ART_LABEL_RE = /^((?:Art\.?|Artigo)\s*\d+[ºo°]?\s*,\s*[A-ZÇÃÕ]{2,8})\
 // label in its own paragraph, with no space-then-body after it, which
 // ART_LABEL_RE's mandatory trailing \s+ can't match).
 const ART_LABEL_ONLY_RE = /^(?:Art\.?|Artigo)\s*\d+[ºo°]?\s*,\s*[A-ZÇÃÕ]{2,8}\.?$/;
+
+/** Maps the "assunto" matched by COMENTARIO_ARTIGO's accent-alt regex
+ *  (artigo/jurisprudencia/sumula, in any spelling the user typed) to the
+ *  fixed display label the comentario box always shows - so "Comentários à
+ *  Súmula:"/"Comentário à Sumula:"/etc. all render the same canonical
+ *  "Comentário à súmula" tag instead of echoing back whatever the user
+ *  typed verbatim. */
+function comentarioLabelFor(matchedPrefix) {
+  const upper = matchedPrefix.toUpperCase();
+  if (/JURISPRUD[EÊ]NCIA/.test(upper)) return 'Comentário à jurisprudência';
+  if (/S[UÚ]MULA/.test(upper)) return 'Comentário à súmula';
+  return 'Comentário ao artigo';
+}
 
 async function loadZipEntry(zip, path) {
   const entry = zip.file(path);
@@ -358,6 +375,14 @@ function extractMarker(subParagraph) {
       inlineText: '',
       inlineHtml: '',
       extraHtml: remainder.length ? segmentsToHtml(remainder) : null,
+    };
+  }
+
+  if (marker === 'COMENTARIO_ARTIGO') {
+    return {
+      marker,
+      inlineText: comentarioLabelFor(m[0]),
+      inlineHtml: segmentsToHtml(remainder),
     };
   }
 

@@ -60,7 +60,7 @@ function renderItem(item) {
     return item.paragrafos.map((p) => `<p class="nota-p">${p}</p>`).join('');
   }
   if (item.type === 'comentario_artigo') {
-    return `<div class="comentario-box"><span class="comentario-tag">Comentário ao artigo</span>${item.paragrafos
+    return `<div class="comentario-box"><span class="comentario-tag">${escapeHtml(item.label)}</span>${item.paragrafos
       .map((p) => `<p>${p}</p>`)
       .join('')}</div>`;
   }
