@@ -22,6 +22,13 @@ const POPPINS_FONT_FACES = FONT_WEIGHTS.map((weight) => {
   return `@font-face{font-family:'Poppins';font-style:normal;font-weight:${weight};src:url(data:font/ttf;base64,${b64}) format('truetype');}`;
 }).join('\n');
 
+// MAPA_MENTAL's palette/box styling lives in assets/style.css (see
+// references/sintaxe.md) instead of inline here, so it can be documented and
+// tweaked on its own - read once and inlined into the page's own <style>,
+// same reasoning as the embedded font faces above (page.setContent has no
+// base URL a linked <link rel="stylesheet"> could resolve against).
+const MAPA_MENTAL_CSS = fs.readFileSync(path.join(__dirname, '..', 'assets', 'style.css'), 'utf8');
+
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, '&amp;')
@@ -84,6 +91,18 @@ function renderItem(item) {
   if (item.type === 'referencias') {
     const itens = item.paragrafos.map((p) => `<li>${p}</li>`).join('');
     return `<div class="ref-box"><span class="ref-label">${escapeHtml(item.label)}</span><ul class="ref-list">${itens}</ul></div>`;
+  }
+  if (item.type === 'mapa_mental') {
+    const titulo = item.titulo ? `<p class="mapa-mental-titulo">${escapeHtml(item.titulo)}</p>` : '';
+    const ramos = item.ramos
+      .map(
+        (r) =>
+          `<div class="mapa-mental-ramo"><span class="mapa-mental-nome">${r.nome}</span>${r.textos
+            .map((t) => `<p class="mapa-mental-texto">${t}</p>`)
+            .join('')}</div>`
+      )
+      .join('');
+    return `<div class="mapa-mental-box">${titulo}${ramos}</div>`;
   }
   if (item.type === 'questao') {
     const enunciado = item.enunciado.map((p) => `<p class="questao-p">${p}</p>`).join('');
@@ -230,6 +249,8 @@ ${POPPINS_FONT_FACES}
   .gabarito{ font-weight:800; color:#6D28D9; font-size:var(--body-size); margin:0 0 6px 0; }
   .coment-label{ font-weight:700; font-size:var(--body-size); margin:0 0 4px 0; }
   .coment-p{ font-size:var(--body-size); line-height:var(--body-line); margin:0 0 6px 0; }
+  .cols > .mapa-mental-box{ break-inside:avoid; }
+${MAPA_MENTAL_CSS}
 </style>
 </head>
 <body>

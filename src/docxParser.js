@@ -13,7 +13,7 @@ const { MARKER_NAMES, STYLE_NAME_PREFIX } = require('./roundTripStyles');
 const MARKERS = [
   'DISCIPLINA', 'SELO', 'SUBTITULO', 'TITULO_SECAO', 'DICA', 'LEI', 'ALERTA', 'TABELA',
   'JURISPRUDENCIA', 'ARTIGOS', 'SUMULAS', 'COMENTARIO_ARTIGO', 'QUESTAO', 'ENUNCIADO', 'GABARITO',
-  'COMENTARIOS',
+  'COMENTARIOS', 'MAPA_MENTAL',
 ];
 // Flexible-format files are often natural Portuguese prose ("Comentários:",
 // "Questão:") rather than the ASCII-only marker spelling, so each marker
@@ -27,6 +27,7 @@ const MARKER_ACCENT_ALTS = {
   COMENTARIO_ARTIGO: 'COMENT[AÁ]RIO\\s+AO\\s+ARTIGO',
   QUESTAO: 'QUEST[AÃ]O',
   COMENTARIOS: 'COMENT[AÁ]RIOS',
+  MAPA_MENTAL: 'MAPA[_ ]MENTAL',
 };
 const MARKER_PREFIX_RE = new RegExp(
   '^\\s*(?:' +

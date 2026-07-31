@@ -59,6 +59,25 @@ const CELL_BORDERS = {
   right: { style: BorderStyle.SINGLE, size: 4, color: 'D9D2EF' },
 };
 
+// Passed to both a Table (which also recognizes insideHorizontal/
+// insideVertical, to kill the default grid line Word draws between rows)
+// and a TableCell (which only reads the four outer sides and ignores the
+// rest) - see renderMapaMentalItem.
+const NO_BORDERS = {
+  top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+  bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+  left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+  right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+  insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+  insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+};
+
+// Mirrors the palette defined in assets/style.css (same hex values, without
+// the leading '#' - the docx library's own color format) - the Word table
+// can't consume that CSS file, so the cycle is just index % length here
+// instead of the CSS's :nth-of-type selectors.
+const MAPA_MENTAL_COLORS = ['5A009F', '1D4E89', '0B7A57', 'C77800', 'A6178A'];
+
 // "Boxes" (.lei-box/.juris-box/.alerta-box/etc. in the PDF) are simulated
 // with shaded, indented paragraphs rather than a shaded table cell -
 // docxParser.js (see roundTripStyles.js) only scans TOP-LEVEL body
@@ -232,6 +251,41 @@ function renderQuestaoItem(item) {
   return [...renderBox(specs, COLORS.questaoBg), spacer()];
 }
 
+/** Renders a MAPA_MENTAL item as a borderless table, one branch per row
+ *  (row height follows the cell's own content, same as any Word table row) -
+ *  see references/sintaxe.md. The optional title sits above the table as its
+ *  own paragraph, since the table itself is one row per branch only. */
+function renderMapaMentalItem(item) {
+  const blocks = [];
+  if (item.titulo) {
+    blocks.push(
+      new Paragraph({
+        style: MARKER_STYLE_IDS.MAPA_MENTAL,
+        children: [run({ text: item.titulo, bold: true, color: COLORS.purple, size: 22 })],
+        spacing: { after: 120 },
+      })
+    );
+  }
+  const rows = item.ramos.map((ramo, i) => {
+    const color = MAPA_MENTAL_COLORS[i % MAPA_MENTAL_COLORS.length];
+    return new TableRow({
+      children: [
+        new TableCell({
+          borders: NO_BORDERS,
+          margins: { top: 40, bottom: 60, left: 0, right: 0 },
+          children: [
+            new Paragraph({ children: runs(ramo.nome, { bold: true, color }), spacing: { after: 40 } }),
+            ...ramo.textos.map((t) => new Paragraph({ ...bodySpec(t, { run: { color: COLORS.dark } }), spacing: { after: 40 } })),
+          ],
+        }),
+      ],
+    });
+  });
+  if (rows.length) blocks.push(new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, borders: NO_BORDERS, rows }));
+  blocks.push(spacer());
+  return blocks;
+}
+
 function renderItem(item) {
   if (item.type === 'dica') {
     // No "DICA NN" badge or emoji baked into the title text: both are
@@ -326,6 +380,7 @@ function renderItem(item) {
   }
   if (item.type === 'tabela') return renderTabelaItem(item);
   if (item.type === 'questao') return renderQuestaoItem(item);
+  if (item.type === 'mapa_mental') return renderMapaMentalItem(item);
   return [];
 }
 
