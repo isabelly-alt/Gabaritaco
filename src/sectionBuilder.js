@@ -192,7 +192,11 @@ function buildSections(blocks) {
           break;
         case 'COMENTARIO_ARTIGO':
           closeItem();
-          currentItem = { type: 'comentario_artigo', paragrafos: block.inlineHtml ? [block.inlineHtml] : [] };
+          currentItem = {
+            type: 'comentario_artigo',
+            label: block.inlineText || 'Comentário ao artigo',
+            paragrafos: block.inlineHtml ? [block.inlineHtml] : [],
+          };
           break;
         case 'QUESTAO':
           closeItem();

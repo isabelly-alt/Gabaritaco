@@ -344,7 +344,7 @@ function renderItem(item) {
           style: MARKER_STYLE_IDS.COMENTARIO_ARTIGO,
           alignment: AlignmentType.JUSTIFIED,
           spacing: { after: 120 },
-          children: [run({ text: 'Comentário ao artigo: ', bold: true, color: COLORS.comentarioTagBg }), ...runs(p, { color: COLORS.comentarioText })],
+          children: [run({ text: `${item.label}: `, bold: true, color: COLORS.comentarioTagBg }), ...runs(p, { color: COLORS.comentarioText })],
         };
       }
       return bodySpec(p, { run: { color: COLORS.comentarioText } });

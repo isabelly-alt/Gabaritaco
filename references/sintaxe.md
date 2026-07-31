@@ -81,10 +81,27 @@ Lei 9.784/99
 
 ## COMENTARIO_ARTIGO
 
+Abre uma caixa azul clara de comentário. Aceita a grafia literal do
+marcador ou variações naturais em português — "Comentário(s)" seguido de
+uma ou duas palavras de ligação (ao, à, à(s), da, sobre o, etc.) e o
+assunto (Artigo, Jurisprudência ou Súmula, no singular ou plural, com ou
+sem acento):
+
 ```
 COMENTARIO_ARTIGO:
 Texto do comentário ao artigo.
+
+Comentários à Jurisprudência:
+Texto do comentário à jurisprudência citada.
+
+Comentários à Súmula:
+Texto do comentário à súmula citada.
 ```
+
+Qualquer uma dessas variações abre a mesma caixa visual, com a etiqueta
+normalizada para "Comentário ao artigo" / "Comentário à jurisprudência" /
+"Comentário à súmula", independentemente de como foi digitado (singular,
+plural, com ou sem acento).
 
 ## MAPA_MENTAL
 
