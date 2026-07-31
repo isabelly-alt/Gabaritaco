@@ -29,6 +29,7 @@ const MARKER_NAMES = [
   'GABARITO',
   'COMENTARIOS',
   'NOTA',
+  'MAPA_MENTAL',
 ];
 
 const STYLE_NAME_PREFIX = 'Gabaritaço ';

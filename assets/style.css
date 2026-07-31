@@ -1,0 +1,33 @@
+/* Paleta e estilos do bloco MAPA_MENTAL (ver references/sintaxe.md).
+   Embutido diretamente no <style> do PDF por src/templateRenderer.js - os
+   mesmos tons hexadecimais são espelhados em src/docxRenderer.js
+   (MAPA_MENTAL_COLORS) para o DOCX, já que a tabela do Word não pode
+   consumir este arquivo CSS. Harmonizada com o roxo do Gabaritaço
+   (--purple: #4C1D95, já usado no restante do template).
+   A paleta cicla via :nth-of-type - se houver mais ramos que cores,
+   recomeça em --mm-color-1 sozinha, sem qualquer lógica em JS. */
+:root {
+  --mm-color-1: #5A009F;
+  --mm-color-2: #1D4E89;
+  --mm-color-3: #0B7A57;
+  --mm-color-4: #C77800;
+  --mm-color-5: #A6178A;
+}
+
+.mapa-mental-box { margin-bottom: 14px; break-inside: avoid; }
+.mapa-mental-titulo { font-weight: 800; color: #4C1D95; font-size: 14.5px; margin: 0 0 8px 0; }
+
+.mapa-mental-ramo { margin-bottom: 10px; break-inside: avoid; }
+.mapa-mental-ramo:last-child { margin-bottom: 0; }
+
+/* Cicla a paleta pela posição do ramo entre os <div> irmãos - o título
+   opcional é um <p>, então não conta para esta contagem. */
+.mapa-mental-ramo:nth-of-type(5n+1) { --mm-ramo-color: var(--mm-color-1); }
+.mapa-mental-ramo:nth-of-type(5n+2) { --mm-ramo-color: var(--mm-color-2); }
+.mapa-mental-ramo:nth-of-type(5n+3) { --mm-ramo-color: var(--mm-color-3); }
+.mapa-mental-ramo:nth-of-type(5n+4) { --mm-ramo-color: var(--mm-color-4); }
+.mapa-mental-ramo:nth-of-type(5n+5) { --mm-ramo-color: var(--mm-color-5); }
+
+.mapa-mental-nome { display: block; font-weight: 800; font-size: var(--body-size); color: var(--mm-ramo-color); margin-bottom: 3px; }
+.mapa-mental-texto { font-size: var(--body-size); line-height: var(--body-line); margin: 0 0 2px 0; padding-left: 10px; border-left: 3px solid var(--mm-ramo-color); color: #374151; }
+.mapa-mental-texto:last-child { margin-bottom: 0; }

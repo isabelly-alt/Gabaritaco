@@ -19,6 +19,42 @@ function stripTags(html) {
   return (html || '').replace(/<[^>]+>/g, '');
 }
 
+// MAPA_MENTAL has no per-branch marker of its own - the raw file just lists
+// "nome do ramo" / explanatory text pairs back to back (see references/
+// sintaxe.md). A short line opens a new branch; every following line, up to
+// the next short line, is that branch's explanatory text.
+const RAMO_NOME_MAX_WORDS = 6;
+const RAMO_NOME_MAX_CHARS = 45;
+const RAMO_NOME_END_RE = /[.:;]\s*$/;
+
+function isRamoNomeLine(text) {
+  if (!text) return false;
+  if (RAMO_NOME_END_RE.test(text)) return false;
+  if (text.length > RAMO_NOME_MAX_CHARS) return false;
+  return text.split(/\s+/).filter(Boolean).length <= RAMO_NOME_MAX_WORDS;
+}
+
+// Turns the flat, line-per-paragraph text collected under a MAPA_MENTAL
+// marker into { nome, textos: [...] } branches. A line with no branch open
+// yet (explanatory text before any short "name" line appears) starts an
+// anonymous branch rather than being dropped.
+function detectMapaMentalRamos(paragraphsHtml) {
+  const ramos = [];
+  let current = null;
+  for (const html of paragraphsHtml) {
+    if (isRamoNomeLine(stripTags(html).trim())) {
+      current = { nome: html, textos: [] };
+      ramos.push(current);
+    } else if (current) {
+      current.textos.push(html);
+    } else {
+      current = { nome: '', textos: [html] };
+      ramos.push(current);
+    }
+  }
+  return ramos;
+}
+
 function splitDashedComments(paragraphs) {
   if (paragraphs.length !== 1) return paragraphs;
   const text = paragraphs[0].replace(LEADING_DASH_RE, '');
@@ -190,6 +226,10 @@ function buildSections(blocks) {
             if (block.inlineHtml) currentItem.comentarios.push(block.inlineHtml);
           }
           break;
+        case 'MAPA_MENTAL':
+          closeItem();
+          currentItem = { type: 'mapa_mental', titulo: block.inlineText || '', paragrafos: [] };
+          break;
         default:
           break;
       }
@@ -262,6 +302,9 @@ function buildSections(blocks) {
         item.emoji = pickEmoji(item.titulo, item.paragrafos.join(' '));
       } else if (item.type === 'questao') {
         item.comentarios = splitDashedComments(item.comentarios);
+      } else if (item.type === 'mapa_mental') {
+        item.ramos = detectMapaMentalRamos(item.paragrafos);
+        delete item.paragrafos;
       }
     }
   }
