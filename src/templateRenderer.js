@@ -45,7 +45,7 @@ function renderTableCell(tag, cell) {
 function renderItem(item) {
   if (item.type === 'dica') {
     const numero = String(item.numero).padStart(2, '0');
-    return `<div class="dica"><div class="dica-head"><div><span class="dica-tag">DICA ${numero}</span><h4 class="dica-title">${escapeHtml(item.titulo)}</h4></div><span class="dica-emoji">${item.emoji}</span></div>${item.paragrafos
+    return `<div class="dica"><div class="dica-head"><span class="dica-tag">DICA ${numero}</span><h4 class="dica-title">${escapeHtml(item.titulo)}</h4></div>${item.paragrafos
       .map((p) => `<p class="dica-p">${p}</p>`)
       .join('')}</div>`;
   }
@@ -76,17 +76,7 @@ function renderItem(item) {
     const tbody = `<tbody>${item.rows
       .map((row) => `<tr>${row.map((c) => renderTableCell('td', c)).join('')}</tr>`)
       .join('')}</tbody>`;
-    // A table with 3+ columns barely fits inside a single half-page CSS
-    // column (~247pt) - each cell ends up so narrow that text can't wrap
-    // without overflowing the page. Spanning it across both columns gives
-    // it the full page width to work with instead.
-    const columnCount = Math.max(
-      item.headers.reduce((n, h) => n + (h.colspan || 1), 0),
-      ...item.rows.map((row) => row.reduce((n, c) => n + (c.colspan || 1), 0)),
-      0
-    );
-    const wrapClass = columnCount >= 3 ? 'tabela-wrap tabela-wide' : 'tabela-wrap';
-    return `<div class="${wrapClass}">${caption}<table class="tabela">${thead}${tbody}</table></div>`;
+    return `<div class="tabela-wrap">${caption}<table class="tabela">${thead}${tbody}</table></div>`;
   }
   if (item.type === 'referencias') {
     const itens = item.paragrafos.map((p) => `<li>${p}</li>`).join('');
@@ -197,7 +187,6 @@ ${POPPINS_FONT_FACES}
   }
   .cols{ column-count:2; column-gap:36px; }
   .cols > .dica, .cols > .lei-box, .cols > .alerta-box, .cols > .ref-box, .cols > .juris-box, .cols > .comentario-box{ break-inside:avoid; }
-  .tabela{ break-inside:avoid; }
   .cols > .questao{ break-inside:auto; }
   .cols p, .cols li{ text-align:justify; text-justify:inter-word; }
   .cols p, .cols li{ line-height:var(--body-line) !important; }
@@ -209,8 +198,6 @@ ${POPPINS_FONT_FACES}
   .matter-band{ column-span:all; background:#4C1D95; color:#fff; font-weight:800; font-size:19px; letter-spacing:.03em; padding:10px 16px; border-radius:8px; margin-bottom:14px; break-before:page; }
   .matter-band.first{ break-before:auto; }
   .dica{ margin-bottom:14px; }
-  .dica-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-  .dica-emoji{ font-size:22px; line-height:1; flex:0 0 auto; }
   .dica-tag{ display:inline-block; background:#FFD23F; color:#2A1155; font-weight:800; font-size:11.5px; letter-spacing:.02em; padding:3px 10px; border-radius:6px; margin-bottom:5px; }
   .dica-title{ color:#6D28D9; font-size:14.5px; margin:0 0 4px 0; }
   .dica-p{ font-size:var(--body-size); line-height:var(--body-line); margin:0 0 2px 0; }
@@ -233,8 +220,7 @@ ${POPPINS_FONT_FACES}
   .ref-box .ref-list{ margin:0; padding-left:18px; }
   .ref-box .ref-list li{ font-size:var(--body-size); line-height:var(--body-line); margin:0 0 2px 0; color:#4C1D95; }
   .tabela-wrap{ margin-bottom:14px; }
-  .tabela-wide{ column-span:all; }
-  .tabela-caption{ font-weight:700; font-size:var(--body-size); margin:0 0 6px 0; }
+  .tabela-caption{ font-weight:700; font-size:var(--body-size); margin:0 0 6px 0; break-after:avoid; }
   .tabela{ width:100%; border-collapse:collapse; font-size:10pt; line-height:var(--body-line); }
   .cols .tabela{ table-layout:fixed; }
   .tabela th{ background:#4C1D95; color:#fff; text-align:left; padding:6px 8px; font-weight:700; overflow-wrap:break-word; word-break:break-word; }

@@ -29,5 +29,5 @@
 .mapa-mental-ramo:nth-of-type(5n+5) { --mm-ramo-color: var(--mm-color-5); }
 
 .mapa-mental-nome { display: block; font-weight: 800; font-size: var(--body-size); color: var(--mm-ramo-color); margin-bottom: 3px; }
-.mapa-mental-texto { font-size: var(--body-size); line-height: var(--body-line); margin: 0 0 2px 0; padding-left: 10px; border-left: 3px solid var(--mm-ramo-color); color: #374151; }
+.mapa-mental-ramo .mapa-mental-texto { font-size: var(--body-size); line-height: var(--body-line); margin: 0 0 2px 0; padding-left: 10px; border-left: 3px solid var(--mm-ramo-color); color: #374151; text-align: left; }
 .mapa-mental-texto:last-child { margin-bottom: 0; }

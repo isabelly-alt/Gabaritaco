@@ -288,11 +288,11 @@ function renderMapaMentalItem(item) {
 
 function renderItem(item) {
   if (item.type === 'dica') {
-    // No "DICA NN" badge or emoji baked into the title text: both are
-    // re-derived automatically on every parse (dicaCounter increments
-    // fresh per TITULO_SECAO; pickEmoji recomputes from titulo/body), so
-    // storing them here would only risk piling up ("DICA 01 DICA 01 ...")
-    // across repeated edit/reupload cycles for no benefit.
+    // No "DICA NN" badge baked into the title text: it's re-derived
+    // automatically on every parse (dicaCounter increments fresh per
+    // TITULO_SECAO), so storing it here would only risk piling up
+    // ("DICA 01 DICA 01 ...") across repeated edit/reupload cycles for no
+    // benefit.
     const blocks = [
       new Paragraph({
         style: MARKER_STYLE_IDS.DICA,
