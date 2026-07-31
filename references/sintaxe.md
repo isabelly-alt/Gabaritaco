@@ -39,8 +39,7 @@ Texto da dica. **Negrito manual** também funciona, além do negrito nativo do W
 ```
 
 Numerada automaticamente por seção (DICA 01, DICA 02…) — não escreva o
-número. Recebe um emoji temático automático (heurística por palavra-chave em
-`src/emojiMap.js`).
+número.
 
 ## LEI
 

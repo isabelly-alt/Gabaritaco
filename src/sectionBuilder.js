@@ -1,7 +1,5 @@
 'use strict';
 
-const { pickEmoji } = require('./emojiMap');
-
 const BRAND_SUFFIX_RE = /[-–—]\s*VDE\s+CONCURSOS\s*$/i;
 const OPTION_LINE_RE = /^[A-E]\)/;
 // Splits a single "- a) ... - b) ... - c) ..." run-on paragraph (common when
@@ -298,9 +296,7 @@ function buildSections(blocks) {
 
   for (const section of sections) {
     for (const item of section.items) {
-      if (item.type === 'dica') {
-        item.emoji = pickEmoji(item.titulo, item.paragrafos.join(' '));
-      } else if (item.type === 'questao') {
+      if (item.type === 'questao') {
         item.comentarios = splitDashedComments(item.comentarios);
       } else if (item.type === 'mapa_mental') {
         item.ramos = detectMapaMentalRamos(item.paragrafos);

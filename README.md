@@ -31,7 +31,6 @@ Regras:
 - `DICA` é numerada automaticamente por seção (DICA 01, DICA 02…) — não escreva o número.
 - Uma linha em branco dentro de um bloco de texto cria um novo parágrafo.
 - `TITULO_SECAO` força quebra de página (exceto a primeira do documento) e reinicia a numeração de DICA.
-- Cada `DICA` recebe um emoji temático automático (heurística por palavra-chave em `src/emojiMap.js` — ajuste a lista lá se quiser mudar os emojis).
 - Arquivos com a mesma `DISCIPLINA:` são agrupados no mesmo PDF, na ordem em que forem enviados.
 
 ## Rodando localmente
